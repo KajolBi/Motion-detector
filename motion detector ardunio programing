@@ -1,0 +1,47 @@
+int pirPin = 4;    //the digital pin connected to the PIR sensor's output
+int ledPin = 13;  // to display output
+int trigPin = 11; // assingnig pin to trigger output of sensor
+int echoPin = 12; // assinging pin to echo input of sensor
+int buzpin=10;
+long cm;// initilization of distance
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600); // to initialize serial port of monitor.
+  pinMode(pirPin, INPUT);
+  pinMode(ledPin, OUTPUT);
+  pinMode(buzpin , OUTPUT);
+  digitalWrite(pirPin, LOW); // initialization of input.
+  Serial.println("This is ultrasonic sensor :");
+  delay(100);
+  
+
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+   if(digitalRead(pirPin) == HIGH) // checking for sensor motion
+  {
+       digitalWrite(ledPin, HIGH);
+       Serial.println("motion detected");
+       long duration, inches; // defining variables
+  pinMode(trigPin, OUTPUT);// trigger output will remain low for 2us.
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH); // trigger output will remain high for 10us.
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  pinMode(echoPin, INPUT);
+  duration = pulseIn(echoPin, HIGH);
+  inches = (duration/ 74 / 2);// converts duration into inches.
+  cm = (duration/ 29 / 2);
+  Serial.println("distance is : ");
+  Serial.println(cm);
+  Serial.println("cm");
+  }
+  else if(digitalRead(pirPin) == LOW){       
+       digitalWrite(ledPin, LOW);
+       Serial.println("motion  not detected");
+       Serial.println("YOU ARE SAFE");
+  }
+delay(500);
+}
